@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const STORAGE_KEY = 'jobSearchState';
-
+const apiUrl = process.env.REACT_APP_SECONDARY_API_URL;
 const JobSearch = ({ initialKeywords = '', children }) => {
   const extractKeywords = () =>
     children?.toString().trim() || initialKeywords;
@@ -15,6 +15,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
           searchTerm: extractKeywords() || parsedState.searchTerm || '',
           sortOrder: parsedState.sortOrder || 'latest',
           currentPage: parsedState.currentPage || 1,
+          limit: parsedState.limit || 10,
         };
       }
     } catch (error) {
@@ -24,6 +25,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
       searchTerm: extractKeywords(),
       sortOrder: 'latest',
       currentPage: 1,
+      limit: 10,
     };
   };
 
@@ -35,68 +37,50 @@ const JobSearch = ({ initialKeywords = '', children }) => {
   const [displayedJobs, setDisplayedJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(initialState.currentPage);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(initialState.limit);
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchAllJobs = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/jobs?limit=5000`);
+     const res = await fetch(`${apiUrl}/jobs?page=${currentPage}&limit=${limit}`);
+
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid JSON response');
+      }
+
       const data = await res.json();
       setAllJobs(data.jobs || []);
+      setTotalPages(data.pages || 1);
     } catch (error) {
       console.error('Failed to fetch jobs', error);
+ 
+
       setAllJobs([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [currentPage, limit]);
 
   useEffect(() => {
     fetchAllJobs();
   }, [fetchAllJobs]);
 
   useEffect(() => {
-    let filteredAndSorted = [...allJobs];
-
-    const orKeywords = searchTerm.split('||').map(k => k.trim().toLowerCase()).filter(Boolean);
-
-    if (orKeywords.length > 0) {
-      filteredAndSorted = filteredAndSorted.filter(job => {
-        const title = (job.job_title || '').toLowerCase();
-        const description = (job.job_description || '').toLowerCase();
-        return orKeywords.some(keyword => title.includes(keyword) || description.includes(keyword));
-      });
-    }
-
-    filteredAndSorted.sort((a, b) => {
+    const filteredAndSorted = [...allJobs].sort((a, b) => {
       const dateA = new Date(a.date_posted || '2000-01-01');
       const dateB = new Date(b.date_posted || '2000-01-01');
       return sortOrder === 'latest' ? dateB - dateA : dateA - dateB;
     });
 
-    const newTotalPages = Math.ceil(filteredAndSorted.length / limit);
     setDisplayedJobs(filteredAndSorted);
-    setTotalPages(newTotalPages);
-
-    if (extractKeywords() !== searchTerm) {
-      setCurrentPage(1);
-    } else if (currentPage > newTotalPages && newTotalPages > 0) {
-      setCurrentPage(newTotalPages);
-    } else if (newTotalPages === 0) {
-      setCurrentPage(1);
-    }
-  }, [allJobs, searchTerm, sortOrder, limit, currentPage, initialKeywords, children]);
+  }, [allJobs, sortOrder]);
 
   useEffect(() => {
-    const stateToSave = { searchTerm, sortOrder, currentPage };
+    const stateToSave = { searchTerm, sortOrder, currentPage, limit };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-  }, [searchTerm, sortOrder, currentPage]);
-
-  const paginatedJobs = displayedJobs.slice(
-    (currentPage - 1) * limit,
-    currentPage * limit
-  );
+  }, [searchTerm, sortOrder, currentPage, limit]);
 
   const truncateDescription = (description, wordLimit) => {
     if (!description) return '';
@@ -118,10 +102,10 @@ const JobSearch = ({ initialKeywords = '', children }) => {
           <input
             type="text"
             placeholder="Search by job title or description..."
-            className="w-full sm:w-2/3 px-5 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:bg-zinc-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-base"
-           
+            className="w-full sm:w-2/3 px-5 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:bg-zinc-900 dark:text-white"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
           <select
             className="w-full sm:w-1/3 px-5 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:bg-zinc-900 dark:text-white"
             value={sortOrder}
@@ -129,6 +113,21 @@ const JobSearch = ({ initialKeywords = '', children }) => {
           >
             <option value="latest">Sort: Latest</option>
             <option value="oldest">Sort: Oldest</option>
+          </select>
+
+          <select
+            value={limit}
+            onChange={(e) => {
+              setLimit(parseInt(e.target.value));
+              setCurrentPage(1); // reset page when limit changes
+            }}
+            className="w-full sm:w-1/3 px-5 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:bg-zinc-900 dark:text-white"
+          >
+            <option value={5}>Show 5 jobs</option>
+            <option value={10}>Show 10 jobs</option>
+            <option value={25}>Show 25 jobs</option>
+            <option value={50}>Show 50 jobs</option>
+            <option value={100}>Show 100 jobs</option>
           </select>
         </div>
 
@@ -143,8 +142,8 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                 <div className="h-10 bg-gray-300 dark:bg-zinc-700 rounded w-1/2 mx-auto"></div>
               </div>
             ))
-          ) : paginatedJobs.length > 0 ? (
-            paginatedJobs.map((job) => (
+          ) : displayedJobs.length > 0 ? (
+            displayedJobs.map((job) => (
               <div
                 key={job._id}
                 className="p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between ring-1 ring-zinc-100 dark:ring-zinc-800 bg-white dark:bg-zinc-950"

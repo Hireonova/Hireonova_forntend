@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const STORAGE_KEY = 'jobSearchState';
-
+const apiUrl = process.env.REACT_APP_SECONDARY_API_URL;
 const FItJobForYou = ({ initialKeywords = '', children }) => {
   const extractKeywords = () =>
     children?.toString().trim() || initialKeywords;
@@ -41,7 +41,7 @@ const FItJobForYou = ({ initialKeywords = '', children }) => {
   const fetchAllJobs = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/jobs?limit=5000`);
+      const res = await fetch(`${apiUrl}/jobs?limit=5000`);
       const data = await res.json();
       setAllJobs(data.jobs || []);
     } catch (error) {
