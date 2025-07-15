@@ -211,7 +211,7 @@ const PDFExtractor = () => {
 
     {isProcessing && (
       <div className="text-center mt-6 text-blue-600 dark:text-blue-400 font-medium animate-pulse">
-        Processing resume with Gemini...
+        Processing resume with AI...
       </div>
     )}
 
