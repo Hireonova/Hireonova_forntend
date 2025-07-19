@@ -95,13 +95,13 @@ const Hero = () => {
             {/* Buttons */}
             <div className="pt-3 flex flex-col sm:flex-row gap-3 w-full">
               <a a href="/login" className="pt-3 flex flex-col sm:flex-row gap-3 w-full">
-                <button className="bg-zinc-900 text-white py-3 px-5 text-sm sm:text-base rounded-lg w-full font-semibold flex items-center justify-center gap-2 shadow-lg hover:bg-zinc-800 transition-all duration-300 transform hover:-translate-y-0.5">
+                <button className="bg-zinc-900 dark:bg-white dark:text-black text-white py-3 px-5 text-sm sm:text-base rounded-lg w-full font-semibold flex items-center justify-center gap-2 shadow-lg hover:bg-zinc-800 transition-all duration-300 transform hover:-translate-y-0.5">
                 <FaGoogle />
                 Sign up with Google
               </button>
               </a>
              <a href="/login" className="pt-3 flex flex-col sm:flex-row gap-3 w-full">
-                 <button className="bg-white dark:bg-zinc-800 ring-1 ring-zinc-200 dark:ring-zinc-700 text-black dark:text-white py-3 px-5 text-sm sm:text-base rounded-lg w-full font-semibold flex items-center justify-center gap-2 shadow-md hover:ring-zinc-300 dark:hover:ring-zinc-600 transition-all duration-300 transform hover:-translate-y-0.5">
+                 <button className="bg-white dark:bg-zinc-800  ring-1 ring-zinc-200 dark:ring-zinc-700 text-black dark:text-white py-3 px-5 text-sm sm:text-base rounded-lg w-full font-semibold flex items-center justify-center gap-2 shadow-md hover:ring-zinc-300 dark:hover:ring-zinc-600 transition-all duration-300 transform hover:-translate-y-0.5">
                 Sign up with email <FaArrowRightLong />
               </button>
              </a>

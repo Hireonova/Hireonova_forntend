@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Upload, CheckCircle } from "lucide-react";
 
 const API_URL = "https://hireonova-backend.vercel.app";
-const GEMINI_KEY = "AIzaSyBn0HWq8y9QDY_GXC_Gqev7Kk3Quo9s8KU";
+const GEMINI_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 const extractWithGemini = async (text) => {
   const prompt = `
@@ -44,9 +44,22 @@ ${text}`.trim();
 
   const data = await res.json();
   let raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-  raw = raw.replace(/```json|```/g, "").trim();
 
+// Remove code fences
+raw = raw.replace(/```json|```/g, "").trim();
+
+// Clean invalid JSON characters (like control chars, line breaks inside strings, etc.)
+raw = raw.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+
+// Try parsing, fallback to {}
+try {
   return JSON.parse(raw);
+} catch (err) {
+  console.error("❌ JSON parse error in Gemini response:", err);
+  console.error("✂️ Raw string that failed to parse:", raw);
+  throw new Error("Invalid JSON returned by Gemini");
+}
+
 };
 
 const PDFExtractor = () => {
@@ -111,7 +124,7 @@ const PDFExtractor = () => {
       }
 
       const parsed = await extractWithGemini(fullText);
-      console.log("🧠 Gemini Parsed Output:", parsed);
+      console.log("🧠  Parsed Output:", parsed);
 
       const email = localStorage.getItem("email");
 
