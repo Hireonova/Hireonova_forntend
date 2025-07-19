@@ -71,7 +71,7 @@ const Hero = () => {
             <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
               Hireonova Scrapes JobBoard, fetches top Opportunities from over{" "}
               <span className="inline-block w-[6rem] text-center font-bold text-zinc-800 dark:text-zinc-200 rounded-md px-1 py-0.5 sm:px-2 sm:py-1 transition-colors duration-500 dark:bg-zinc-800 bg-gray-200">
-                <CountUp end={60000} duration={3} separator="," />+
+                <CountUp end={200000} duration={3} separator="," />+
               </span>{" "}
               active job portals, and automates the hiring process with
               intelligence.

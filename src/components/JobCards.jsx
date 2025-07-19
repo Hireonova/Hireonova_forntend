@@ -50,8 +50,8 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
   if (jobs.length === 0) {
     return (
       <div className="text-center py-20">
-        <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600 dark:text-gray-400 text-lg">No jobs found matching your criteria</p>
+        <Briefcase className="w-16 h-16 text-zinc-400 mx-auto mb-4" />
+        <p className="text-zinc-600 dark:text-zinc-400 text-lg">No jobs found matching your criteria</p>
       </div>
     );
   }
@@ -61,7 +61,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
       {jobs.map((job) => (
         <div
           key={job._id}
-          className="flex flex-col md:flex-row gap-6 p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300"
+          className="flex flex-col md:flex-row gap-6 p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:shadow-xl hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-300"
         >
           <div className="flex-shrink-0">
             <img
@@ -78,7 +78,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
 
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">
                 {highlightMatch(job.job_title || 'Job Title', highlight)}
               </h3>
               <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium mt-2 md:mt-0">
@@ -86,11 +86,11 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
               </span>
             </div>
 
-            <p className="text-gray-700 dark:text-gray-300 mt-2">
-              {highlightMatch(truncateDescription(job.job_description, 30), highlight)}
+            <p className="text-zinc-700 dark:text-zinc-300 mt-2">
+              {highlightMatch(truncateDescription(job.job_description, 60), highlight)}
             </p>
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400 mt-3">
+            <div className="flex flex-wrap gap-4 text-sm text-zinc-600 dark:text-zinc-400 mt-3">
               <div className="flex items-center gap-1">
                 <MapPin size={16} />
                 {highlightMatch(job.location || 'Remote', highlight)}
@@ -129,7 +129,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
                 href={job.apply_url || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-5 py-2 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-5 py-2 rounded-full font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
               >
                 Apply Now
                 <ExternalLink size={16} />

@@ -51,10 +51,10 @@ const Footer = () => {
             </a>
           </div>
           {/* GitHub and Contribution links using lucide-react icons */}
-          <a href="https://github.com/your-repo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors mb-2">
+          <a href="https://github.com/hireonova/hireonova-frontend" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors mb-2">
             <Github size={16} /> Star on GitHub
           </a>
-          <a href="https://github.com/your-repo/contribute" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">
+          <a href="https://github.com/Hireonova/Hireonova_forntend" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">
             <GitFork size={16} /> Start Contributing
           </a>
         </div>

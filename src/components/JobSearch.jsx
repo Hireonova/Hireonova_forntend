@@ -224,27 +224,31 @@ const JobSearch = ({ initialKeywords = '', children }) => {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
-            Find Your Dream Job
-          </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 font-medium">
+          <h1 className="text-5xl font-black bg-gradient-to-r 
+  from-zinc-700 via-gray-500 to-zinc-700 
+  dark:from-gray-200 dark:via-zinc-100 dark:to-gray-200 
+  bg-clip-text text-transparent mb-4">
+  Find Your Dream Job
+</h1>
+
+          <p className="text-xl text-zinc-600 dark:text-zinc-300 font-medium">
             Discover opportunities that match your ambitions
           </p>
         </div>
 
         {/* Search & Filters Section */}
-        <div className="backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 rounded-3xl p-8 mb-8 shadow-2xl border border-white/20">
+        <div className="backdrop-blur-sm bg-white/10 dark:bg-zinc-900/50 rounded-3xl p-8 mb-8 shadow-2xl border border-white/20">
           {/* Main Search Bar */}
           <div className="relative mb-8">
             <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-              <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
             <input
               type="text"
               placeholder="Search for your next opportunity..."
-              className="w-full pl-16 pr-6 py-6 text-lg bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-2xl focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-600 transition-all duration-300 outline-none text-slate-900 dark:text-white placeholder-slate-500"
+              className="w-full pl-16 pr-6 py-6 text-lg bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-2xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-600 transition-all duration-300 outline-none text-zinc-900 dark:text-white placeholder-zinc-500"
               value={searchTerm}
               onChange={handleSearchChange}
             />
@@ -254,12 +258,12 @@ const JobSearch = ({ initialKeywords = '', children }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Experience Level */}
             <div className="space-y-3">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                 Experience Level
               </label>
               <div className="relative">
                 <select
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-zinc-900 dark:text-white"
                   value={experienceFilter}
                   onChange={handleExperienceChange}
                 >
@@ -270,7 +274,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                   ))}
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -279,12 +283,12 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
             {/* Location */}
             <div className="space-y-3">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                 Location
               </label>
               <div className="relative">
                 <select
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-zinc-900 dark:text-white"
                   value={locationFilter}
                   onChange={handleLocationChange}
                 >
@@ -296,7 +300,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                   ))}
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -306,12 +310,12 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
             {/* Role Type */}
             <div className="space-y-3">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                 Role Type
               </label>
               <div className="relative">
                 <select
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-zinc-900 dark:text-white"
                   value={roleTypeFilter}
                   onChange={handleRoleTypeChange}
                 >
@@ -326,7 +330,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                   <option value="finance">Finance</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -335,12 +339,12 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
             {/* Job Type */}
             <div className="space-y-3">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                 Work Type
               </label>
               <div className="relative">
                 <select
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none appearance-none text-zinc-900 dark:text-white"
                   value={jobTypeFilter}
                   onChange={handleJobTypeChange}
                 >
@@ -354,7 +358,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                   <option value="internship">🎓 Internship</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -364,19 +368,19 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
           {/* Skills Filter */}
           <div className="mt-6">
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+            <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
               Skills & Technologies
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
               </div>
               <input
                 type="text"
                 placeholder="e.g., React, Node.js, Python, TypeScript..."
-                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none text-slate-900 dark:text-white placeholder-slate-500"
+                className="w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-xl focus:border-indigo-500 transition-all duration-300 outline-none text-zinc-900 dark:text-white placeholder-zinc-500"
                 value={skillsFilter}
                 onChange={handleSkillsChange}
               />
@@ -384,7 +388,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
           </div>
 
           {/* Controls Row */}
-          <div className="flex flex-wrap gap-4 mt-8 pt-6 border-t border-slate-200 dark:border-slate-600">
+          <div className="flex flex-wrap gap-4 mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-600">
             {/* Clear Filters Button */}
             <button
               onClick={clearAllFilters}
@@ -398,9 +402,9 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
             {/* Sort */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Sort by:</span>
+              <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Sort by:</span>
               <select
-                className="px-4 py-2 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-lg focus:border-indigo-500 transition-all duration-300 outline-none text-sm text-slate-900 dark:text-white"
+                className="px-4 py-2 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-lg focus:border-indigo-500 transition-all duration-300 outline-none text-sm text-zinc-900 dark:text-white"
                 value={sortOrder}
                 onChange={handleSortChange}
               >
@@ -411,11 +415,11 @@ const JobSearch = ({ initialKeywords = '', children }) => {
 
             {/* Results per page */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Show:</span>
+              <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Show:</span>
               <select
                 value={limit}
                 onChange={handleLimitChange}
-                className="px-4 py-2 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-lg focus:border-indigo-500 transition-all duration-300 outline-none text-sm text-slate-900 dark:text-white"
+                className="px-4 py-2 bg-zinc-50 dark:bg-zinc-700 border-2 border-transparent rounded-lg focus:border-indigo-500 transition-all duration-300 outline-none text-sm text-zinc-900 dark:text-white"
               >
                 {[9, 12, 15, 18, 21, 24].map((num) => (
                   <option key={num} value={num}>{num} jobs</option>
@@ -436,7 +440,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
             <p className="mt-6 text-xl font-semibold text-indigo-600 dark:text-indigo-400 animate-pulse">
               🔍 Finding the best jobs for you...
             </p>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
               Searching through thousands of opportunities
             </p>
           </div>
@@ -455,7 +459,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex flex-col items-center mt-12 space-y-4">
-                <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+                <div className="text-sm text-zinc-600 dark:text-zinc-400 font-medium">
                   Showing page {currentPage} of {totalPages}
                 </div>
                 <div className="flex items-center gap-3">
@@ -464,8 +468,8 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                     disabled={currentPage === 1 || loading}
                     className={`group flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                       currentPage === 1 || loading
-                        ? 'bg-slate-100 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
-                        : 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-lg hover:shadow-xl hover:-translate-y-1 border border-indigo-200 dark:border-slate-600'
+                        ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400 cursor-not-allowed'
+                        : 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-lg hover:shadow-xl hover:-tranzinc-y-1 border border-indigo-200 dark:border-zinc-600'
                     }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,7 +493,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                           className={`w-10 h-10 rounded-full font-semibold transition-all duration-300 ${
                             currentPage === pageNum
                               ? 'bg-indigo-600 text-white shadow-lg'
-                              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-700'
+                              : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-indigo-50 dark:hover:bg-zinc-700'
                           }`}
                         >
                           {pageNum}
@@ -503,8 +507,8 @@ const JobSearch = ({ initialKeywords = '', children }) => {
                     disabled={currentPage === totalPages || loading}
                     className={`group flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                       currentPage === totalPages || loading
-                        ? 'bg-slate-100 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
-                        : 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-lg hover:shadow-xl hover:-translate-y-1 border border-indigo-200 dark:border-slate-600'
+                        ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400 cursor-not-allowed'
+                        : 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-lg hover:shadow-xl hover:-tranzinc-y-1 border border-indigo-200 dark:border-zinc-600'
                     }`}
                   >
                     Next
