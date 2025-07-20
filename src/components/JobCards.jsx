@@ -104,6 +104,10 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
                 {highlightMatch(job.experience || 'Any level', highlight)} experience
               </div>
               <div className="flex items-center gap-1">
+                <Zap size={16} />
+                {highlightMatch(job.job_type || 'Full time', highlight)}  
+              </div>
+              <div className="flex items-center gap-1">
                 <Code size={16} />
                 {highlightMatch(
                   Array.isArray(job.skills)

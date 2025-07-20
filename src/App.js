@@ -10,6 +10,8 @@ import TechStack from './components/TechStack';
 import Hero from './pages/Hero';
 import Login from './pages/Login';
 import Home from './pages/Home'; // Assuming this is your dashboard or main app after login
+import About from './pages/About';
+import Documentation from './pages/Documentation';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -49,8 +51,9 @@ function App() {
 
         {/* Login Page */}
         <Route path="/login" element={<Login />} />
-
-        {/* Catch-All Route */}
+          <Route path='/aboutus' element={<About/>}/>   
+          <Route path='/docs' element={<Documentation/>}/>   
+               
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
