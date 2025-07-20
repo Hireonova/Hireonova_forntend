@@ -1,7 +1,7 @@
+// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// Components & Pages
 import BackgroundGrid from './components/Background';
 import Footer from './components/Footer';
 import JobSearch from './components/JobSearch';
@@ -9,11 +9,17 @@ import Navbar from './components/Navbar';
 import TechStack from './components/TechStack';
 import Hero from './pages/Hero';
 import Login from './pages/Login';
-import Home from './pages/Home'; // Assuming this is your dashboard or main app after login
 import About from './pages/About';
 import Documentation from './pages/Documentation';
+import ProtectedLayout from './components/ProtectedLayout';
+ 
+import FItJobForYou from './components/FItJobForYou';
+import DashboardComponent from './components/DashboardComponent';
+import PDFExtractor from './components/PDFExtractor';
+import LikedJobs from './components/LikedJobs';
+import CvtoSite from './components/CvtoSite';
 
-// Protected Route Component
+// Auth check wrapper
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" replace />;
@@ -23,6 +29,7 @@ function App() {
   return (
     <Router>
       <Routes>
+
         {/* Public Landing Page "/" */}
         <Route
           path="/"
@@ -32,28 +39,36 @@ function App() {
                 <Navbar />
                 <Hero />
                 <TechStack />
-                <JobSearch></JobSearch>
+                <JobSearch />
                 <Footer />
               </BackgroundGrid>
             </section>
           }
         />
 
-        {/* Protected Home Page */}
+        {/* Public Pages */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/aboutus" element={<About />} />
+        <Route path="/docs" element={<Documentation />} />
+
+        {/* Protected Layout with sidebar */}
         <Route
-          path="/home"
+          path="/app"
           element={
             <ProtectedRoute>
-              <Home />
+              <ProtectedLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<DashboardComponent />} />
+          <Route path="dashboard" element={<DashboardComponent />} />
+          <Route path="upload-resume" element={<PDFExtractor />} />
+          <Route path="job-fit" element={<FItJobForYou />} />
+          <Route path="liked-jobs" element={<LikedJobs />} />
+           <Route path="site-builder" element={<CvtoSite />} />
+        </Route>
 
-        {/* Login Page */}
-        <Route path="/login" element={<Login />} />
-          <Route path='/aboutus' element={<About/>}/>   
-          <Route path='/docs' element={<Documentation/>}/>   
-               
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

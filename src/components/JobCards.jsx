@@ -44,52 +44,50 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
 
   useEffect(() => {
     if (!email) return;
+
     axios
       .get(`${API_URL}/api/likedjobsget`, { params: { email } })
       .then((res) => {
-        setLikedJobs(new Set(res.data.liked_job_ids));
+        const ids = res.data.liked_job_ids || [];
+        setLikedJobs(new Set(ids));
+        localStorage.setItem(`liked_job_ids_${email}`, JSON.stringify(ids));
       })
       .catch(() => {});
   }, [email]);
 
   const handleLikeToggle = async (jobId) => {
-  if (!email) {
-    navigate('/login');
-    return;
-  }
-
-  const isLiked = likedJobs.has(jobId);
-
-  // Optimistically update UI
-  setLikedJobs((prev) => {
-    const updated = new Set(prev);
-    isLiked ? updated.delete(jobId) : updated.add(jobId);
-    return updated;
-  });
-
-  try {
-    if (isLiked) {
-      await axios.post(`${API_URL}/api/dislikejob`, {
-        email,
-        job_id: jobId,
-      });
-    } else {
-      await axios.post(`${API_URL}/api/likedjob`, {
-        email,
-        job_id: jobId,
-      });
+    if (!email) {
+      navigate('/login');
+      return;
     }
-  } catch (err) {
-    console.error('Failed to toggle like:', err);
-    // Rollback UI update if request fails
-    setLikedJobs((prev) => {
-      const rollback = new Set(prev);
-      isLiked ? rollback.add(jobId) : rollback.delete(jobId);
-      return rollback;
-    });
-  }
-};
 
+    const isLiked = likedJobs.has(jobId);
+    const updated = new Set(likedJobs);
+    isLiked ? updated.delete(jobId) : updated.add(jobId);
+    setLikedJobs(updated);
+    localStorage.setItem(`liked_job_ids_${email}`, JSON.stringify([...updated]));
+
+    try {
+      if (isLiked) {
+        await axios.post(`${API_URL}/api/dislikejob`, {
+          email,
+          job_id: jobId,
+        });
+      } else {
+        await axios.post(`${API_URL}/api/likedjob`, {
+          email,
+          job_id: jobId,
+        });
+      }
+    } catch (err) {
+      console.error('Failed to toggle like:', err);
+      // Roll back on failure
+      const rollback = new Set(likedJobs);
+      isLiked ? rollback.add(jobId) : rollback.delete(jobId);
+      setLikedJobs(rollback);
+      localStorage.setItem(`liked_job_ids_${email}`, JSON.stringify([...rollback]));
+    }
+  };
 
   if (loading) {
     return (

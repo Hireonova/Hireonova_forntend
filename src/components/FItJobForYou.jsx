@@ -38,7 +38,7 @@ const FItJobForYou = ({ initialKeywords = '', children }) => {
   const fetchAllJobs = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/jobs?limit=5000`);
+      const res = await fetch(`${apiUrl}/api/jobs?limit=5000`);
       const data = await res.json();
       setAllJobs(data.jobs || []);
     } catch (error) {

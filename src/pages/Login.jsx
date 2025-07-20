@@ -51,7 +51,7 @@ const Login = () => {
     const token = localStorage.getItem("token");
     if (token) {
       window.requestAnimationFrame(() => {
-        navigate("/home");
+        navigate("/app");
       });
     }
   }, [navigate]);
@@ -113,7 +113,7 @@ const Login = () => {
         localStorage.setItem("username", data.username);
         localStorage.setItem("email", data.email);
         toast.success("Login successful!", { position: "top-center" });
-        setTimeout(() => navigate("/home"), 1500);
+        setTimeout(() => navigate("/app"), 1500);
       } else {
         toast.success("Signup successful! You can now login.", { position: "top-center" });
         setIsLogin(true);

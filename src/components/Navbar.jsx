@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Briefcase, Target, FileText, Code, Heart,ThumbsUp } from 'lucide-react';
+import { Menu, X, ChevronDown, Briefcase, Target, FileText, Code, Heart, ThumbsUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { IoIosLogOut } from "react-icons/io";
@@ -118,9 +118,9 @@ export default function Navbar() {
   );
 
   const jobsDropdownItems = [
-    { name: 'Job Fit For You', href: '/home#job-fit', icon: Target, description: 'AI-matched opportunities' },
+    { name: 'Job Fit For You', href: '/app/job-fit', icon: Target, description: 'AI-matched opportunities' },
     { name: 'Search Jobs', href: '#jobs', icon: Briefcase, description: 'Browse all positions' },
-     { name: 'Liked Jobs', href: '/liked-jobs', icon: ThumbsUp, description: 'Jobs you’ve liked' } // ✅ New item
+    { name: 'Liked Jobs', href: '/app/liked-jobs', icon: ThumbsUp, description: 'Jobs you’ve liked' }
   ];
 
   const resourcesDropdownItems = [
@@ -130,7 +130,7 @@ export default function Navbar() {
   ];
 
   const navLinks = [
-    { name: 'Dashboard', href: '/home' },
+    { name: 'Dashboard', href: '/app/dashboard' },
     { 
       name: 'Jobs', 
       isDropdown: true, 
@@ -154,11 +154,13 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="absolute top-full left-0 mt-2 w-64 rounded-2xl border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl dark:bg-black/20"
+          className="absolute top-full left-0 mt-2 w-64 rounded-2xl border border-white/10 bg-white p-2 shadow-2xl backdrop-blur-2xl dark:bg-black"
           onMouseEnter={() => handleDropdownEnter(dropdownKey)}
           onMouseLeave={handleDropdownLeave}
         >
-          <div className="absolute inset-0 rounded-2xl bg-white" />
+          {/* FIX #2: Removed the solid white background div below that was breaking the glass effect.
+            <div className="absolute inset-0 rounded-2xl bg-white" /> 
+          */}
           {items.map((item, index) => (
             <motion.button
               key={item.name}
@@ -175,7 +177,7 @@ export default function Navbar() {
                 <item.icon size={16} />
               </div>
               <div>
-                <div className="font-medium text-gray-900   group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <div className="font-medium text-gray-900 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
                   {item.name}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -195,7 +197,7 @@ export default function Navbar() {
         className={`relative flex items-center justify-between rounded-3xl px-6 py-4 transition-all duration-500 ${
           hasScrolled
             ? 'border border-white/20 bg-white/10 shadow-2xl backdrop-blur-2xl dark:bg-black/20 dark:border-white/10'
-            : 'border border-transparent bg-white/5 backdrop-blur-sm dark:bg-black/5'
+            : 'border border-transparent bg-white/ backdrop-blur-sm dark:bg-black/'
         }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -225,7 +227,8 @@ export default function Navbar() {
         </motion.a>
 
         {/* Desktop Menu */}
-        <div className="hidden items-center gap-2 md:flex" ref={dropdownRef}>
+        {/* FIX #1: Added 'relative' and 'z-10' to ensure this menu appears above the gradient overlay */}
+        <div className="relative z-10 hidden items-center gap-2 md:flex" ref={dropdownRef}>
           {navLinks.map((link) => (
             <div key={link.name} className="relative">
               {link.isDropdown ? (
@@ -269,7 +272,7 @@ export default function Navbar() {
           {isLoggedIn && (
             <motion.button
               onClick={handleLogout}
-              className="flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-red-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600"
+              className="flex items-center cursor-pointer gap-2 rounded-xl px-4 py-2 font-medium text-red-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600"
               whileHover={{ y: -2, scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
