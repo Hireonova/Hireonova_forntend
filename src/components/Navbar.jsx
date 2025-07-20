@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Briefcase, Target, FileText, Code, Heart } from 'lucide-react';
+import { Menu, X, ChevronDown, Briefcase, Target, FileText, Code, Heart,ThumbsUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { IoIosLogOut } from "react-icons/io";
@@ -60,10 +60,19 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    navigate('/login');
-  };
+  // Clear all user-related localStorage keys
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  localStorage.removeItem('email');
+  localStorage.removeItem('loggedInUser');
+  localStorage.removeItem('isAuthenticated');
+
+  // Optionally, clear entire localStorage if you want
+  // localStorage.clear();
+
+  // Redirect to login page
+  navigate('/login');
+};
 
   const handleDropdownEnter = (dropdownName) => {
     if (timeoutRef.current) {
@@ -111,6 +120,7 @@ export default function Navbar() {
   const jobsDropdownItems = [
     { name: 'Job Fit For You', href: '/home#job-fit', icon: Target, description: 'AI-matched opportunities' },
     { name: 'Search Jobs', href: '#jobs', icon: Briefcase, description: 'Browse all positions' },
+     { name: 'Liked Jobs', href: '/liked-jobs', icon: ThumbsUp, description: 'Jobs you’ve liked' } // ✅ New item
   ];
 
   const resourcesDropdownItems = [

@@ -6,22 +6,8 @@ import CvtoSite from '../components/CvtoSite';
 import DashboardComponent from '../components/DashboardComponent';
 import { motion, AnimatePresence } from 'framer-motion';
 import ResumeSearch from '../components/ResumeSearch';
-
-const SettingsComponent = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="p-6 bg-white dark:bg-zinc-950 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 transition-all duration-300 hover:shadow-2xl"
-  >
-    <h2 className="text-3xl font-bold mb-6 text-zinc-950 dark:text-white bg-gradient-to-r from-zinc-950 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-      Application Settings
-    </h2>
-    <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
-      Adjust your application preferences here.
-    </p>
-  </motion.div>
-);
+import LikedJobs from '../components/LikedJobs';
+ 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -103,7 +89,7 @@ const Home = () => {
     const components = {
       'Dashboard': <DashboardComponent />,
       'PDFExtractor': <PDFExtractor />,
-      'Settings': <SettingsComponent />,
+      'LikedJobs': <LikedJobs />,
       'cvtosite': <CvtoSite />,
       'Resumesearch':<ResumeSearch/>
     };
@@ -348,7 +334,7 @@ const Home = () => {
                 { key: 'PDFExtractor', label: 'Upload Resume' },
                 { key: 'Resumesearch', label: 'Job Fit for you' },
                 { key: 'cvtosite', label: 'Portfolio Builder' },
-                { key: 'Settings', label: 'Settings' }
+                { key: 'LikedJobs', label: 'LikedJobs' }
               ].map((item, index) => (
                 <motion.li
                   key={item.key}

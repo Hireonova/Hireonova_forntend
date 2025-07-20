@@ -110,7 +110,7 @@ const JobSearch = ({ initialKeywords = '', children }) => {
       if (debouncedSkillsFilter) params.append('skills', debouncedSkillsFilter);
 
       try {
-        const res = await fetch(`${apiUrl}/jobs?${params.toString()}`);
+        const res = await fetch(`${apiUrl}/api/jobs?${params.toString()}`);
         if (!res.ok) throw new Error('Network response was not ok');
 
         const data = await res.json();
