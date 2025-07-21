@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   MapPin,
   Briefcase,
@@ -57,7 +59,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
 
   const handleLikeToggle = async (jobId) => {
     if (!email) {
-      navigate('/login');
+       toast.warn("Login required", { position: "top-right" });
       return;
     }
 
@@ -204,7 +206,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
                     : 'Recently posted'}
                 </div>
               </div>
-
+<ToastContainer />
               <div className="mt-4 flex justify-end">
                 <a
                   href={job.apply_url || '#'}
@@ -218,6 +220,7 @@ const JobCards = ({ jobs = [], loading = false, limit = 6, highlight = '' }) => 
               </div>
             </div>
           </div>
+          
         );
       })}
     </div>
