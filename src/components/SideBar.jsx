@@ -29,19 +29,21 @@ import {
   X,
 } from "lucide-react";
 
+// Import the custom hook
+import { useLocalStorage } from '../components/hooks/useLocalStorage'; // Adjust this path as needed based on where you saved useLocalStorage.js
+
 const SidebarContext = createContext();
 
 export const SideBar = () => {
     const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme");
-      return saved || "light";
-    }
-    return "light";
-  });
+  
+  // Use the custom useLocalStorage hook for theme, username, and profilePicture
+  const [theme, setTheme] = useLocalStorage("theme", "light");
+  const [username, setUsername] = useLocalStorage("username", "Guest");
+  const [profilePicture, setProfilePicture] = useLocalStorage("profilePicture", ""); 
+
   const [showProfileModal, setShowProfileModal] = useState(false);
   const profileRef = useRef(null);
 
@@ -60,35 +62,31 @@ export const SideBar = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [expanded]);
 
+  // This useEffect is still needed to apply the theme class to the documentElement
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
+    // localStorage.setItem("theme", theme); // No longer needed here, handled by useLocalStorage
   }, [theme]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-    const handleLogout = () => {
-  // Clear all user-related localStorage keys
-  localStorage.removeItem('token');
-  localStorage.removeItem('username');
-  localStorage.removeItem('email');
-  localStorage.removeItem('loggedInUser');
-  localStorage.removeItem('isAuthenticated');
+  const handleLogout = () => {
+    // Use the setters from useLocalStorage to clear reactive states
+    setUsername("Guest");
+    setProfilePicture("");
+    setTheme("light"); // Reset theme on logout if desired
 
-  // Optionally, clear entire localStorage if you want
-  // localStorage.clear();
+    // Manually clear other localStorage keys that don't use the hook
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('isAuthenticated');
 
-  // Redirect to login page
-  navigate('/login');
-};
-
-
-  const [username, setUsername] = useState(() => {
-    const stored = localStorage.getItem("username");
-    return stored || "Guest";
-  });
+    // Redirect to login page
+    navigate('/login');
+  };
 
   const userInitial = username.charAt(0).toUpperCase();
 
@@ -176,8 +174,6 @@ export const SideBar = () => {
                 text="Dashboard"
                 to="/app/dashboard"
               />
-              
-
               <SidebarItem
                 icon={<Upload size={20} />}
                 text="Upload Resume"
@@ -256,12 +252,21 @@ export const SideBar = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <motion.div
-                  className="w-10 h-10 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-white shadow-lg"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  {userInitial}
-                </motion.div>
+                {profilePicture ? (
+                  <motion.img
+                    src={profilePicture}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover shadow-lg"
+                    whileHover={{ scale: 1.05 }}
+                  />
+                ) : (
+                  <motion.div
+                    className="w-10 h-10 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-white shadow-lg"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {userInitial}
+                  </motion.div>
+                )}
                 <AnimatePresence>
                   {expanded && (
                     <motion.div
@@ -315,6 +320,7 @@ export const SideBar = () => {
         onClose={() => setShowProfileModal(false)}
         username={username}
         userInitial={userInitial}
+        profilePicture={profilePicture} // Pass profile picture to modal
         profileRef={profileRef}
         expanded={expanded}
       />
@@ -399,6 +405,7 @@ const ProfileModal = ({
   onClose,
   username,
   userInitial,
+  profilePicture, // Receive profile picture
   profileRef,
   expanded,
 }) => {
@@ -467,12 +474,21 @@ const ProfileModal = ({
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <motion.div
-                  className="w-10 h-10 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-white"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  {userInitial}
-                </motion.div>
+                {profilePicture ? (
+                  <motion.img
+                    src={profilePicture}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover"
+                    whileHover={{ scale: 1.05 }}
+                  />
+                ) : (
+                  <motion.div
+                    className="w-10 h-10 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-white"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {userInitial}
+                  </motion.div>
+                )}
                 <div className="ml-3">
                   <h3 className="font-bold text-gray-900 dark:text-white text-sm">
                     {username}

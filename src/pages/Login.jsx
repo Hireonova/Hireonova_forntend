@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundGrid from "../components/Background";
+import { FaGithub } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FcGoogle } from "react-icons/fc";
 import { CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 
-// Helper component for checklist items
 const PasswordCriteriaItem = ({ isMet, text }) => (
   <li className={`flex items-center gap-2 transition-colors duration-300 ${isMet ? "text-green-400" : "text-zinc-400"}`}>
     {isMet ? <CheckCircle className="w-4 h-4 flex-shrink-0" /> : <XCircle className="w-4 h-4 flex-shrink-0" />}
@@ -23,24 +24,20 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // ✨ RENAMED STATE: This state now controls if the checklist has ever been shown.
   const [isChecklistVisible, setIsChecklistVisible] = useState(false);
-  
   const [passwordCriteria, setPasswordCriteria] = useState({
     length: false,
     uppercase: false,
     specialChar: false,
   });
 
-  // Check if form is valid for submission
+  // Access the environment variable here
+  const API_AUTH_BASE_URL = process.env.REACT_APP_TERTIARY_API_URL;
+
   const isFormValid = () => {
-    if (isLogin) {
-      return identifier.trim() && password.trim();
-    } else {
-      const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
-      return username.trim() && identifier.trim() && password.trim() && isPasswordValid;
-    }
+    if (isLogin) return identifier.trim() && password.trim();
+    const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
+    return username.trim() && identifier.trim() && password.trim() && isPasswordValid;
   };
 
   useEffect(() => {
@@ -48,12 +45,25 @@ const Login = () => {
   }, [isLogin]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const username = urlParams.get("username");
+    const email = urlParams.get("email");
+    const image = urlParams.get("image");
+
     if (token) {
-      window.requestAnimationFrame(() => {
-        navigate("/app");
-      });
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("email", email);
+      localStorage.setItem("profilePicture", image || "");
+      toast.success("OAuth login successful!", { position: "top-center" });
+      navigate("/app");
     }
+  }, [navigate]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) navigate("/app");
   }, [navigate]);
 
   useEffect(() => {
@@ -74,9 +84,10 @@ const Login = () => {
       return;
     }
 
+    // Use the environment variable here
     const endpoint = isLogin
-      ? "https://auth-universal-repo.vercel.app/api/auth/login"
-      : "https://auth-universal-repo.vercel.app/api/auth/signup";
+      ? `${API_AUTH_BASE_URL}/login`
+      : `${API_AUTH_BASE_URL}/signup`;
 
     const payload = isLogin
       ? { identifier: identifier.toLowerCase(), password }
@@ -89,22 +100,10 @@ const Login = () => {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      
+
       if (!res.ok) {
-        // Handle different error response structures
-        let errorMessage = "An error occurred. Please try again.";
-        
-        if (data.error) {
-          errorMessage = data.error;
-        } else if (data.message) {
-          errorMessage = data.message;
-        } else if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
-          errorMessage = data.errors[0].msg || data.errors[0];
-        } else if (typeof data === 'string') {
-          errorMessage = data;
-        }
-        
-        setErrorMsg(errorMessage);
+        let errorMessage = data?.error || data?.message || (data.errors?.[0]?.msg || data);
+        setErrorMsg(errorMessage || "An error occurred. Please try again.");
         return;
       }
 
@@ -123,52 +122,40 @@ const Login = () => {
         localStorage.setItem("email", identifier);
       }
     } catch (err) {
-      // Handle network errors or JSON parsing errors
-      if (err.name === 'TypeError' && err.message.includes('fetch')) {
-        setErrorMsg("Network error. Please check your connection and try again.");
-      } else if (err.name === 'SyntaxError') {
-        setErrorMsg("Server response error. Please try again later.");
-      } else {
-        setErrorMsg("An unexpected error occurred. Please try again.");
-      }
+      setErrorMsg("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleOAuth = (provider) => {
-    window.location.href = `https://auth-universal-repo.vercel.app/api/auth/${provider}`;
+    // Use the environment variable here
+    window.location.href = `${API_AUTH_BASE_URL}/${provider}`;
   };
 
   return (
-    <section className="w-full min-h-screen bg-gradient-to-br from-zinc-900 to-black dark:bg-gradient-to-br dark:from-zinc-900 dark:to-black text-white relative">
+    <section className="w-full min-h-screen bg-gradient-to-br from-zinc-900 to-black text-white relative">
       <ToastContainer />
       <BackgroundGrid>
         <Navbar />
         <div className="flex flex-col items-center mt-20 justify-center min-h-[80vh] px-4">
-          <div className="backdrop-blur-lg bg-white/10 dark:bg-black/10 border my-6 border-white/20 dark:border-white/10 p-8 rounded-2xl shadow-2xl max-w-md w-full">
-            <h1 className="text-3xl text-black dark:text-white  font-semibold text-center mb-6">
+          <div className="backdrop-blur-lg bg-white/10 border my-6 border-white/20 p-8 rounded-2xl shadow-2xl max-w-md w-full">
+            <h1 className="text-3xl text-white font-semibold text-center mb-6">
               {isLogin ? "Login" : "Create an Account"}
             </h1>
-            <form onSubmit={handleSubmit} className="space-y-4 ">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div>
-                  <label className="text-sm  text-zinc-900 dark:text-zinc-400">Username</label>
+                  <label className="text-sm text-zinc-400">Username</label>
                   <input
                     type="text"
                     value={username}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      // Only allow letters, numbers, and underscores
-                      if (/^[a-zA-Z0-9_]*$/.test(value)) {
-                        setUsername(value);
-                      }
-                    }}
+                    onChange={(e) => /^[a-zA-Z0-9_]*$/.test(e.target.value) && setUsername(e.target.value)}
                     required
-                    className="w-full px-4 py-2 dark:bg-zinc-800 text-black bg-gray-300 dark:text-white rounded-lg focus:outline-none focus:ring"
+                    className="w-full px-4 py-2 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                   />
                 </div>
               )}
               <div>
-                <label className="text-sm text-zinc-800 dark:text-zinc-400">
+                <label className="text-sm text-zinc-400">
                   {isLogin ? "Email or Username" : "Email"}
                 </label>
                 <input
@@ -176,11 +163,11 @@ const Login = () => {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   required
-                  className="w-full px-4 py-2 dark:bg-zinc-800 text-black bg-gray-300 dark:text-white rounded-lg focus:outline-none focus:ring"
+                  className="w-full px-4 py-2 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                 />
               </div>
               <div>
-                <label className="text-sm text-zinc-800 dark:text-zinc-400">Password</label>
+                <label className="text-sm text-zinc-400">Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -188,35 +175,22 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setIsChecklistVisible(true)}
                     required
-                    className="w-full px-4 py-2 pr-10 dark:bg-zinc-800 text-black bg-gray-300 dark:text-white rounded-lg focus:outline-none focus:ring"
+                    className="w-full px-4 py-2 pr-10 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-zinc-200"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                
-                <div
-                  className={`transition-all duration-500 ease-in-out overflow-hidden 
-                    ${isChecklistVisible ? 'max-h-40 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}
-                >
+                <div className={`transition-all duration-500 overflow-hidden ${isChecklistVisible ? 'max-h-40 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
                   <div className="p-3 bg-zinc-800/80 rounded-lg text-sm">
                     <ul className="space-y-2">
-                      <PasswordCriteriaItem
-                        isMet={passwordCriteria.length}
-                        text="At least 6 characters"
-                      />
-                      <PasswordCriteriaItem
-                        isMet={passwordCriteria.uppercase}
-                        text="One uppercase letter (A-Z)"
-                      />
-                      <PasswordCriteriaItem
-                        isMet={passwordCriteria.specialChar}
-                        text="One special character (!@#$%^&*)"
-                      />
+                      <PasswordCriteriaItem isMet={passwordCriteria.length} text="At least 6 characters" />
+                      <PasswordCriteriaItem isMet={passwordCriteria.uppercase} text="One uppercase letter (A-Z)" />
+                      <PasswordCriteriaItem isMet={passwordCriteria.specialChar} text="One special character (!@#$%^&*)" />
                     </ul>
                   </div>
                 </div>
@@ -225,17 +199,13 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={!isFormValid()}
-                className="w-full dark:bg-white dark:hover:bg-gray-200 dark:text-black hover:bg-zinc-800 bg-black text-white font-semibold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:bg-gray-500 disabled:bg-gray-600"
+                className="w-full bg-black dark:bg-white dark:text-black text-white font-semibold py-2 rounded-lg transition disabled:opacity-50"
               >
                 {isLogin ? "Sign In" : "Sign Up"}
               </button>
-              <p className="text-center text-sm text-zinc-400 dark:text-zinc-300">
-                {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-                <button
-                  type="button"
-                  className="text-black dark:text-white underline"
-                  onClick={() => setIsLogin(!isLogin)}
-                >
+              <p className="text-center text-sm text-zinc-400">
+                {isLogin ? "Don't have an account?" : "Already have an account?"} {" "}
+                <button type="button" className="text-white underline" onClick={() => setIsLogin(!isLogin)}>
                   {isLogin ? "Sign up" : "Log in"}
                 </button>
               </p>
@@ -243,16 +213,16 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => handleOAuth("google")}
-                  className="bg-white dark:bg-zinc-800 text-black dark:text-white px-4 py-2 rounded-lg font-medium hover:opacity-90"
+                  className="bg-white flex items-center gap-4 text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
                 >
-                  {isLogin ? "Sign in" : "Sign up"} with Google
+                  {isLogin ? "Sign in" : "Sign up"} with Google <FcGoogle />
                 </button>
                 <button
                   type="button"
                   onClick={() => handleOAuth("github")}
-                  className="bg-zinc-700 text-white dark:bg-zinc-700 dark:text-white px-4 py-2 rounded-lg font-medium hover:bg-zinc-600"
+                  className="bg-zinc-700 gap-2 flex items-center text-white px-4 py-2 rounded-lg font-medium hover:bg-zinc-600"
                 >
-                  GitHub
+                  GitHub <FaGithub />
                 </button>
               </div>
             </form>
