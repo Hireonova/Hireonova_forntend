@@ -31,9 +31,6 @@ const Login = () => {
     specialChar: false,
   });
 
-  // Access the environment variable here
-  const API_AUTH_BASE_URL = process.env.REACT_APP_TERTIARY_API_URL;
-
   const isFormValid = () => {
     if (isLogin) return identifier.trim() && password.trim();
     const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
@@ -44,23 +41,22 @@ const Login = () => {
     document.title = isLogin ? "Login Page" : "Signup Page";
   }, [isLogin]);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const username = urlParams.get("username");
-    const email = urlParams.get("email");
-    const image = urlParams.get("image");
+useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const username = urlParams.get("username");
+  const email = urlParams.get("email");
+  const image = urlParams.get("image"); // ✅ get image from URL
 
-    if (token) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", username);
-      localStorage.setItem("email", email);
-      localStorage.setItem("profilePicture", image || "");
-      toast.success("OAuth login successful!", { position: "top-center" });
-      navigate("/app");
-    }
-  }, [navigate]);
-
+  if (token) {
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email);
+    localStorage.setItem("profilePicture", image || ""); // ✅ save image
+    toast.success("OAuth login successful!", { position: "top-center" });
+    navigate("/app");
+  }
+}, [navigate]);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) navigate("/app");
@@ -84,10 +80,9 @@ const Login = () => {
       return;
     }
 
-    // Use the environment variable here
     const endpoint = isLogin
-      ? `${API_AUTH_BASE_URL}/login`
-      : `${API_AUTH_BASE_URL}/signup`;
+      ? "https://auth-universal-repo.vercel.app/api/auth/login"
+      : "https://auth-universal-repo.vercel.app/api/auth/signup";
 
     const payload = isLogin
       ? { identifier: identifier.toLowerCase(), password }
@@ -127,8 +122,7 @@ const Login = () => {
   };
 
   const handleOAuth = (provider) => {
-    // Use the environment variable here
-    window.location.href = `${API_AUTH_BASE_URL}/${provider}`;
+    window.location.href = `https://auth-universal-repo.vercel.app/api/auth/${provider}`;
   };
 
   return (
