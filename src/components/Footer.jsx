@@ -28,9 +28,9 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-start text-center md:text-left w-full md:w-1/3 lg:w-1/4">
           <h4 className="text-lg font-semibold mb-3">Company</h4>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">About Us</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">Careers</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">Blog</a></li>
+            <li><a href="/aboutus" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">About Us</a></li>
+            <li><a href="/docs" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">Careers</a></li>
+            <li><a href="/docs" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">Blog</a></li>
             <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors">Contact</a></li>
           </ul>
         </div>

@@ -132,7 +132,7 @@ useEffect(() => {
         <Navbar />
         <div className="flex flex-col items-center mt-20 justify-center min-h-[80vh] px-4">
           <div className="backdrop-blur-lg bg-white/10 border my-6 border-white/20 p-8 rounded-2xl shadow-2xl max-w-md w-full">
-            <h1 className="text-3xl text-white font-semibold text-center mb-6">
+            <h1 className="text-3xl dark:text-white text-black font-semibold text-center mb-6">
               {isLogin ? "Login" : "Create an Account"}
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -144,7 +144,8 @@ useEffect(() => {
                     value={username}
                     onChange={(e) => /^[a-zA-Z0-9_]*$/.test(e.target.value) && setUsername(e.target.value)}
                     required
-                    className="w-full px-4 py-2 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
+                    placeholder="john_doe"
+                    className="w-full px-4 py-2  bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                   />
                 </div>
               )}
@@ -157,6 +158,7 @@ useEffect(() => {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   required
+                  placeholder="JohnDoe@gmail.com"
                   className="w-full px-4 py-2 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                 />
               </div>
@@ -169,6 +171,7 @@ useEffect(() => {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setIsChecklistVisible(true)}
                     required
+                    placeholder="Password"
                     className="w-full px-4 py-2 pr-10 bg-gray-300 dark:bg-zinc-800 text-black dark:text-white rounded-lg focus:outline-none focus:ring"
                   />
                   <button
@@ -199,11 +202,11 @@ useEffect(() => {
               </button>
               <p className="text-center text-sm text-zinc-400">
                 {isLogin ? "Don't have an account?" : "Already have an account?"} {" "}
-                <button type="button" className="text-white underline" onClick={() => setIsLogin(!isLogin)}>
+                <button type="button" className="  text-blue-700 underline" onClick={() => setIsLogin(!isLogin)}>
                   {isLogin ? "Sign up" : "Log in"}
                 </button>
               </p>
-              <div className="flex items-center justify-center gap-4 mt-4">
+              <div className="flex flex-col items-center justify-center gap-4 mt-4">
                 <button
                   type="button"
                   onClick={() => handleOAuth("google")}
@@ -216,7 +219,7 @@ useEffect(() => {
                   onClick={() => handleOAuth("github")}
                   className="bg-zinc-700 gap-2 flex items-center text-white px-4 py-2 rounded-lg font-medium hover:bg-zinc-600"
                 >
-                  GitHub <FaGithub />
+                  {isLogin ? "Sign in" : "Sign up"} with GitHub <FaGithub />
                 </button>
               </div>
             </form>
